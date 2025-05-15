@@ -8,15 +8,21 @@
 </head>
 <body class="bg-gradient-to-br from-pink-100 to-rose-200 min-h-screen p-4 flex justify-center">
   <div class="max-w-3xl w-full bg-white rounded-2xl shadow-xl p-6">
+    
+    <!-- Imagem das unhas no topo -->
     <img src="unhas.jpg" alt="Unhas esmaltadas" class="w-full rounded-xl mb-6 shadow-md object-cover"/>
+
     <h1 class="text-3xl font-bold text-center text-rose-700 mb-4">CUTÍCULAS PERFEITAS</h1>
     <p class="text-center text-lg font-semibold text-gray-800 mb-6">
       Manicure com Cera + Esmaltação em Gel<br>
       <span class="text-sm text-gray-600">Aula On-line com Certificado</span>
     </p>
+
+    <!-- Imagem da instrutora -->
     <div class="flex justify-center mb-6">
       <img src="instrutora.jpg" alt="Instrutora do curso" class="w-40 h-40 rounded-full object-cover border-4 border-rose-300 shadow-lg"/>
     </div>
+
     <form id="leadForm" class="space-y-4">
       <input type="text" id="nome" placeholder="Seu nome" required class="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400">
       <input type="tel" id="telefone" placeholder="Seu telefone" required class="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-400">
@@ -24,22 +30,33 @@
       <button type="submit" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-semibold py-3 rounded-xl transition">Quero me inscrever</button>
     </form>
   </div>
+
   <script>
     const form = document.getElementById('leadForm');
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
+
       const nome = document.getElementById('nome').value;
       const telefone = document.getElementById('telefone').value;
       const email = document.getElementById('email').value;
-      const scriptURL = 'https://script.google.com/macros/s/SEU_SCRIPT_URL/exec';
+
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbwCKf2kbEyGA-pbV3uOJWeKN3Yv_jiYQ0K_0WCsFHCGzSUQnq6B2ULQzIcXpuPAy36png/exec';
+
       try {
-        await fetch(scriptURL, {
+        const response = await fetch(scriptURL, {
           method: 'POST',
           body: JSON.stringify({ nome, telefone, email }),
           headers: { 'Content-Type': 'application/json' }
         });
-        const mensagem = `Olá! Meu nome é ${nome}, meu telefone é ${telefone} e tenho interesse no curso de Cutículas Perfeitas. Meu e-mail é ${email}.`;
-        window.location.href = `https://wa.me/5547991288177?text=${encodeURIComponent(mensagem)}`;
+
+        const result = await response.json();
+
+        if (result.result === "success") {
+          const mensagem = `Olá! Meu nome é ${nome}, meu telefone é ${telefone} e tenho interesse no curso de Cutículas Perfeitas. Meu e-mail é ${email}.`;
+          window.location.href = `https://wa.me/5547991288177?text=${encodeURIComponent(mensagem)}`;
+        } else {
+          alert("Erro ao enviar os dados: " + result.message);
+        }
       } catch (error) {
         alert("Erro ao enviar os dados. Tente novamente.");
         console.error('Erro:', error);
