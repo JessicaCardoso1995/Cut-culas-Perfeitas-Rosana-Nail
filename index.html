@@ -40,7 +40,7 @@
       const telefone = document.getElementById('telefone').value;
       const email = document.getElementById('email').value;
 
-      const scriptURL = 'https://script.google.com/macros/s/AKfycbwCKf2kbEyGA-pbV3uOJWeKN3Yv_jiYQ0K_0WCsFHCGzSUQnq6B2ULQzIcXpuPAy36png/exec';
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbz4Km_jUNiSrFH0kIpXjFIxViWmH0tGQKPahm0FlUPTS-luZyhXIRNm9C3Dc6oBpNZ1Iw/exec';
 
       try {
         const response = await fetch(scriptURL, {
@@ -49,17 +49,13 @@
           headers: { 'Content-Type': 'application/json' }
         });
 
-        const result = await response.json();
+        if (!response.ok) throw new Error('Erro na resposta do servidor.');
 
-        if (result.result === "success") {
-          const mensagem = `Olá! Meu nome é ${nome}, meu telefone é ${telefone} e tenho interesse no curso de Cutículas Perfeitas. Meu e-mail é ${email}.`;
-          window.location.href = `https://wa.me/5547991288177?text=${encodeURIComponent(mensagem)}`;
-        } else {
-          alert("Erro ao enviar os dados: " + result.message);
-        }
+        const mensagem = `Olá! Meu nome é ${nome}, meu telefone é ${telefone} e tenho interesse no curso de Cutículas Perfeitas. Meu e-mail é ${email}.`;
+        window.location.href = `https://wa.me/5547991288177?text=${encodeURIComponent(mensagem)}`;
       } catch (error) {
         alert("Erro ao enviar os dados. Tente novamente.");
-        console.error('Erro:', error);
+        console.error('Erro ao enviar dados:', error);
       }
     });
   </script>
